@@ -1,0 +1,20 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Nathan Miller"
+            }
+        ],
+        "Category": "System Information",
+        "Description": "System-tray indicator for provider off-peak/peak rate schedules",
+        "Icon": "weather-clear-night",
+        "Id": "org.nam20485.offpeaktray",
+        "License": "MIT",
+        "Name": "Off-Peak Tray",
+        "Version": "1.0.0",
+        "Website": "https://github.com/nam20485/plasma-offpeak-tray"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationAreaCategory": "ApplicationStatus"
+}

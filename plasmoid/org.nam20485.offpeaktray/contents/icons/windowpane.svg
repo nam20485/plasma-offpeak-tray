@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22">
+  <!-- Windowpane: square frame + center cross (4 panes). Rendered via
+       Kirigami.Icon isMask, so only the alpha shape matters. -->
+  <path fill="#000000" d="M 2 2 L 20 2 L 20 4 L 2 4 Z M 2 18 L 20 18 L 20 20 L 2 20 Z M 2 2 L 4 2 L 4 20 L 2 20 Z M 18 2 L 20 2 L 20 20 L 18 20 Z M 10 4 L 12 4 L 12 18 L 10 18 Z M 4 10 L 18 10 L 18 12 L 4 12 Z"/>
+</svg>
