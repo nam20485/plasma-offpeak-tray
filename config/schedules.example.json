@@ -1,0 +1,26 @@
+{
+    "schedules": [
+        {
+            "name": "Z.AI GLM",
+            "kind": "peak",
+            "timezone": "Asia/Singapore",
+            "offsetMinutes": 480,
+            "days": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+            "start": "14:00",
+            "end": "18:00",
+            "docsUrl": "https://docs.z.ai/devpack/notice/usage-revision",
+            "subtext": "Mon-Fri 14:00-18:00 Singapore time is PEAK (3x quota). All other hours, including weekends, bill at the 50% off-peak rate."
+        },
+        {
+            "name": "Qwen",
+            "kind": "offPeak",
+            "timezone": "Asia/Shanghai",
+            "offsetMinutes": 480,
+            "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            "start": "22:00",
+            "end": "08:00",
+            "docsUrl": "https://www.alibabacloud.com/blog/qwen3-7-off-peak-rates_603404",
+            "subtext": "Nightly 22:00-08:00 Beijing time is OFF-PEAK: up to 80-98% off credit consumption on Qwen3.x models, weekends included."
+        }
+    ]
+}
