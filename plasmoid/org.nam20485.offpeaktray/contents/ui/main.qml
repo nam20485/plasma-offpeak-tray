@@ -110,6 +110,25 @@ PlasmoidItem {
                            b.d * 1440 + b.m - st.mins);
     }
 
+    // Convert a schedule's provider-zone window to the user's local timezone,
+    // e.g. "(07:00 - 17:00 PDT)". Uses the system's current DST offset.
+    function localHoursText(sch) {
+        if (!sch || !sch.start || !sch.end)
+            return "";
+        const localOffset = root.now.getTimezoneOffset();
+        const s = parseHM(sch.start);
+        const e = parseHM(sch.end);
+        const fmt = function (mins) {
+            let lm = mins - (sch.offsetMinutes ?? 0) - localOffset;
+            lm = ((lm % 1440) + 1440) % 1440;
+            const h = Math.floor(lm / 60);
+            const m = lm % 60;
+            return h + ":" + (m < 10 ? "0" + m : m);
+        };
+        const tz = Qt.formatDateTime(root.now, "t");
+        return "(" + fmt(s) + " - " + fmt(e) + " " + tz + ")";
+    }
+
     // Combined (dynamic) schedule: the intersection of every schedule's
     // discounted state. State now:
     function combinedOffPeak(t) {
@@ -336,10 +355,8 @@ PlasmoidItem {
                 // gridUnit*24 minimum for tray popups; this fills it).
                 Layout.fillHeight: true
                 padding: Kirigami.Units.smallSpacing * 2
-                onClicked: {
-                    if (modelData.sch.docsUrl)
-                        Qt.openUrlExternally(modelData.sch.docsUrl);
-                }
+                // Clicking the row body no longer opens the URL; only the
+                // subtext link below does, when a docsUrl exists.
 
                 background: Rectangle {
                     radius: Kirigami.Units.smallSpacing / 2
@@ -386,14 +403,36 @@ PlasmoidItem {
                     }
 
                     PC3.Label {
-                        text: modelData.sch.subtext ?? ""
-                        visible: !!modelData.sch.subtext
+                        text: localHoursText(modelData.sch)
+                        visible: !!modelData.sch.start && !!modelData.sch.end
                         font: Kirigami.Theme.smallFont
                         color: Kirigami.Theme.disabledTextColor
                         Layout.fillWidth: true
                         wrapMode: Text.Wrap
+                    }
+
+                    PC3.Label {
+                        id: subtextLabel
+
+                        text: modelData.sch.subtext ?? ""
+                        visible: !!modelData.sch.subtext
+                        font: Kirigami.Theme.smallFont
+                        color: modelData.sch.docsUrl ? Kirigami.Theme.linkColor
+                                                      : Kirigami.Theme.disabledTextColor
+                        Layout.fillWidth: true
+                        wrapMode: Text.Wrap
                         verticalAlignment: Text.AlignTop
                         Layout.fillHeight: true
+
+                        MouseArea {
+                            anchors.fill: parent
+                            enabled: !!modelData.sch.docsUrl
+                            cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
+                            onClicked: {
+                                if (modelData.sch.docsUrl)
+                                    Qt.openUrlExternally(modelData.sch.docsUrl);
+                            }
+                        }
                     }
                 }
             }
