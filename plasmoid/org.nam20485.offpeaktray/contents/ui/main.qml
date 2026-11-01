@@ -201,7 +201,7 @@ PlasmoidItem {
         const out = [];
         const inventory = [];
         for (const s of root.schedules) {
-            const st = scheduleState(s);
+            const st = scheduleState(s, root.now);
             out.push({ sch: s, st: st, boundary: boundaryText(s, st) });
             inventory.push(s.name + ": " + (st.state === "offPeak"
                 ? qsTr("off-peak") : qsTr("peak")));
@@ -227,7 +227,7 @@ PlasmoidItem {
     readonly property int offSchedules: {
         let n = 0;
         for (const s of root.schedules)
-            if (scheduleState(s).state === "offPeak")
+            if (scheduleState(s, root.now).state === "offPeak")
                 n++;
         return n;
     }
@@ -337,7 +337,7 @@ PlasmoidItem {
     toolTipSubText: root.configError !== ""
         ? root.configError
         : root.schedules.map(s => {
-              const st = scheduleState(s);
+              const st = scheduleState(s, root.now);
               return s.name + ": " + (st.state === "offPeak" ? qsTr("off-peak") : qsTr("peak"));
           }).join("\n")
 

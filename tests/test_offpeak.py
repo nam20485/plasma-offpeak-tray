@@ -1,6 +1,7 @@
 """Unit tests for scripts/offpeak.py — run: python3 -m unittest discover -s tests -v"""
 
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -11,6 +12,8 @@ import offpeak  # noqa: E402
 
 EXAMPLE_PATH = Path(__file__).resolve().parent.parent / "config" / "schedules.example.json"
 EXAMPLE = json.loads(EXAMPLE_PATH.read_text(encoding="utf-8"))
+MAIN_QML_PATH = (Path(__file__).resolve().parent.parent / "plasmoid"
+                 / "org.nam20485.offpeaktray" / "contents" / "ui" / "main.qml")
 
 
 def schedule(**over):
@@ -162,6 +165,14 @@ class GenUnitsTests(unittest.TestCase):
                 self.assertTrue(summary)
                 self.assertTrue(body)
                 self.assertIn(urgency, ("critical", "normal"))
+
+
+class TrayRefreshTests(unittest.TestCase):
+    def test_state_calls_pass_timestamp_during_refresh(self):
+        source = MAIN_QML_PATH.read_text(encoding="utf-8")
+        timestamps = re.findall(r"\bscheduleState\(s(?:\s*,\s*([^)]+))?\)", source)
+        self.assertEqual(len(timestamps), 4)
+        self.assertTrue(all(timestamps), timestamps)
 
 
 class SlugifyTests(unittest.TestCase):
