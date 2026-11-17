@@ -20,7 +20,7 @@
             "start": "22:00",
             "end": "08:00",
             "docsUrl": "https://www.alibabacloud.com/blog/qwen3-7-off-peak-rates_603404",
-            "subtext": "Nightly 22:00-08:00 Beijing time is OFF-PEAK: up to 80-98% off credit consumption on Qwen3.x models, weekends included."
+            "subtext": "Nightly 22:00-08:00 Beijing time is OFF-PEAK, weekends included: 40% off nights on auto, qwen3.8-max, and qwen3.8-flash; limited-time 80% off on qwen4-max-preview; qwen4-max has no night discount."
         }
     ]
 }
