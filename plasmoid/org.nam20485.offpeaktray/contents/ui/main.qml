@@ -422,7 +422,6 @@ PlasmoidItem {
                         Layout.fillWidth: true
                         wrapMode: Text.Wrap
                         verticalAlignment: Text.AlignTop
-                        Layout.fillHeight: true
 
                         MouseArea {
                             anchors.fill: parent
@@ -433,6 +432,79 @@ PlasmoidItem {
                                     Qt.openUrlExternally(modelData.sch.docsUrl);
                             }
                         }
+                    }
+
+                    // Per-model discount table: model | discount | note,
+                    // columns kept aligned across rows by a shared GridLayout.
+                    // A row with a discount lights up (bold + green) while the
+                    // schedule is in its discounted state; a null discount
+                    // (model has none) stays dim as "—" at all times.
+                    GridLayout {
+                        id: discounts
+
+                        readonly property var entry: modelData
+                        readonly property bool lit: entry.st.state === "offPeak"
+                        // Duck-check, NOT Array.isArray(): an array that
+                        // crossed the modelData/var-property boundary loses
+                        // its Array internal type in QML (isArray → false).
+                        visible: {
+                            const d = entry.sch.discounts;
+                            return !!d && typeof d === "object" && d.length > 0;
+                        }
+                        columns: 3
+                        columnSpacing: Kirigami.Units.smallSpacing * 2
+                        rowSpacing: 0
+                        Layout.fillWidth: true
+
+                        Repeater {
+                            model: discounts.visible ? discounts.entry.sch.discounts : []
+
+                            PC3.Label {
+                                Layout.row: index
+                                Layout.column: 0
+                                Layout.fillWidth: true
+                                text: modelData.model ?? ""
+                                elide: Text.ElideRight
+                                // font.pointSize (not the smallFont group) so
+                                // font.bold can be set on the same label.
+                                font.pointSize: Kirigami.Theme.smallFont.pointSize
+                                font.bold: discounts.lit && !!modelData.discount
+                                color: discounts.lit && !!modelData.discount
+                                       ? Kirigami.Theme.positiveTextColor
+                                       : Kirigami.Theme.disabledTextColor
+                            }
+                        }
+
+                        Repeater {
+                            model: discounts.visible ? discounts.entry.sch.discounts : []
+
+                            PC3.Label {
+                                Layout.row: index
+                                Layout.column: 1
+                                text: modelData.discount ?? qsTr("—")
+                                font.pointSize: Kirigami.Theme.smallFont.pointSize
+                                font.bold: discounts.lit && !!modelData.discount
+                                color: discounts.lit && !!modelData.discount
+                                       ? Kirigami.Theme.positiveTextColor
+                                       : Kirigami.Theme.disabledTextColor
+                            }
+                        }
+
+                        Repeater {
+                            model: discounts.visible ? discounts.entry.sch.discounts : []
+
+                            PC3.Label {
+                                Layout.row: index
+                                Layout.column: 2
+                                text: modelData.note ?? ""
+                                font: Kirigami.Theme.smallFont
+                                color: Kirigami.Theme.disabledTextColor
+                            }
+                        }
+                    }
+
+                    Item {
+                        Layout.fillHeight: true
                     }
                 }
             }

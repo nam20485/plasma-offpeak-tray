@@ -98,6 +98,27 @@ def validate_config(doc: object) -> list[dict]:
         subtext = sch.get("subtext")
         if subtext is not None and not isinstance(subtext, str):
             raise ValueError(f"{label}.subtext: optional string required")
+        discounts = sch.get("discounts")
+        if discounts is not None:
+            if not isinstance(discounts, list) or not discounts:
+                raise ValueError(f"{label}.discounts: optional non-empty list required")
+            seen_models = set()
+            for j, disc in enumerate(discounts):
+                dlabel = f"{label}.discounts[{j}]"
+                if not isinstance(disc, dict):
+                    raise ValueError(f"{dlabel}: must be an object")
+                model = disc.get("model")
+                if not isinstance(model, str) or not model.strip():
+                    raise ValueError(f"{dlabel}.model: non-empty string required")
+                if model in seen_models:
+                    raise ValueError(f"{dlabel}.model: duplicate model {model!r}")
+                seen_models.add(model)
+                amount = disc.get("discount")
+                if amount is not None and (not isinstance(amount, str) or not amount.strip()):
+                    raise ValueError(f"{dlabel}.discount: non-empty string or null required")
+                note = disc.get("note")
+                if note is not None and (not isinstance(note, str) or not note.strip()):
+                    raise ValueError(f"{dlabel}.note: optional non-empty string required")
     return doc["schedules"]
 
 

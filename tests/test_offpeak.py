@@ -92,6 +92,44 @@ class ValidateConfigTests(unittest.TestCase):
     def test_rejects_non_string_subtext(self):
         self.assertTrue(invalid_doc({"schedules": [schedule(subtext=42)]}))
 
+    def test_accepts_optional_discounts(self):
+        discounts = [
+            {"model": "m1", "discount": "40% off"},
+            {"model": "m2", "discount": None},
+            {"model": "m3", "discount": "80% off", "note": "limited time"},
+        ]
+        schedules = offpeak.validate_config({"schedules": [schedule(discounts=discounts)]})
+        self.assertEqual(schedules[0]["discounts"], discounts)
+
+    def test_rejects_empty_discounts(self):
+        self.assertTrue(invalid_doc({"schedules": [schedule(discounts=[])]}))
+
+    def test_rejects_non_list_discounts(self):
+        self.assertTrue(invalid_doc({"schedules": [schedule(discounts="40% off")]}))
+
+    def test_rejects_non_object_discount_row(self):
+        self.assertTrue(invalid_doc({"schedules": [schedule(discounts=["40% off"])]}))
+
+    def test_rejects_discount_row_missing_model(self):
+        self.assertTrue(invalid_doc({"schedules": [schedule(discounts=[{"discount": "40% off"}])]}))
+
+    def test_rejects_empty_discount_model(self):
+        self.assertTrue(invalid_doc({"schedules": [schedule(discounts=[{"model": " "}])]}))
+
+    def test_rejects_bad_discount_amount(self):
+        for value in ("", "  ", 42):
+            self.assertTrue(invalid_doc({"schedules": [
+                schedule(discounts=[{"model": "m", "discount": value}])]}), value)
+
+    def test_rejects_bad_discount_note(self):
+        self.assertTrue(invalid_doc({"schedules": [
+            schedule(discounts=[{"model": "m", "discount": "40% off", "note": 5}])]}))
+
+    def test_rejects_duplicate_discount_models(self):
+        discounts = [{"model": "m", "discount": "40% off"},
+                     {"model": "m", "discount": "80% off"}]
+        self.assertTrue(invalid_doc({"schedules": [schedule(discounts=discounts)]}))
+
 
 class CalendarSpecTests(unittest.TestCase):
     def setUp(self):

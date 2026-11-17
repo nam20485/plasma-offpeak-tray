@@ -55,8 +55,10 @@ The detail popup (click the tray icon) lists every schedule as a bordered
 card row that expands to fill the popup height; each row shows a green/red
 dot, the state, when the discounted state changes (`Off-peak starts Mon
 7:00 am · in 5h 12m`, in the user's local timezone), and the optional
-`subtext` detail text. Clicking a schedule row opens that provider's
-discount documentation (`docsUrl`) in the default browser.
+`subtext` detail text. A schedule with a `discounts` array renders it as an
+aligned per-model table; rows carrying a discount light up (bold + green)
+while that schedule is off-peak. Clicking a schedule row opens that
+provider's discount documentation (`docsUrl`) in the default browser.
 
 ## Configuration
 
@@ -73,6 +75,7 @@ discount documentation (`docsUrl`) in the default browser.
 | `start`, `end`  | `"HH:MM"`| window bounds; `end <= start` means the window crosses midnight and attaches to the **start** day |
 | `docsUrl`       | string?  | optional `http(s)://` link opened when the popup row is clicked |
 | `subtext`       | string?  | optional detail text shown under the schedule inside its popup row (discount details, etc.) |
+| `discounts`     | object[]? | optional per-model rows `{model, discount, note?}` shown as an aligned table in the popup; `discount: null` means the model has no discount (shown as "—"). Rows with a discount render **bold + green** while the schedule is in its discounted state |
 
 Example (the shipped default):
 
@@ -97,7 +100,14 @@ Example (the shipped default):
       "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       "start": "22:00",
       "end": "08:00",
-      "docsUrl": "https://www.alibabacloud.com/blog/qwen3-7-off-peak-rates_603404"
+      "docsUrl": "https://www.alibabacloud.com/blog/qwen3-7-off-peak-rates_603404",
+      "discounts": [
+        { "model": "auto", "discount": "40% off" },
+        { "model": "qwen3.8-max", "discount": "40% off" },
+        { "model": "qwen3.8-flash", "discount": "40% off" },
+        { "model": "qwen4-max-preview", "discount": "80% off", "note": "limited time" },
+        { "model": "qwen4-max", "discount": null }
+      ]
     }
   ]
 }
