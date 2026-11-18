@@ -90,7 +90,11 @@ Example (the shipped default):
       "days": ["Mon", "Tue", "Wed", "Thu", "Fri"],
       "start": "14:00",
       "end": "18:00",
-      "docsUrl": "https://docs.z.ai/devpack/notice/usage-revision"
+      "docsUrl": "https://docs.z.ai/devpack/notice/usage-revision",
+      "discounts": [
+        { "model": "GLM-5.3", "discount": "50% off", "note": "3x at peak" },
+        { "model": "GLM-5.3-Flash", "discount": "50% off", "note": "1.2x at peak" }
+      ]
     },
     {
       "name": "Qwen",

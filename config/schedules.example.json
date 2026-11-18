@@ -9,7 +9,11 @@
             "start": "14:00",
             "end": "18:00",
             "docsUrl": "https://docs.z.ai/devpack/notice/usage-revision",
-            "subtext": "Mon-Fri 14:00-18:00 Singapore time is PEAK (3x quota). All other hours, including weekends, bill at the 50% off-peak rate."
+            "subtext": "Mon-Fri 14:00-18:00 Singapore time is PEAK; all other hours and weekends are off-peak.",
+            "discounts": [
+                { "model": "GLM-5.3", "discount": "50% off", "note": "3x at peak" },
+                { "model": "GLM-5.3-Flash", "discount": "50% off", "note": "1.2x at peak" }
+            ]
         },
         {
             "name": "Qwen",
