@@ -462,7 +462,17 @@ PlasmoidItem {
                             PC3.Label {
                                 Layout.row: index
                                 Layout.column: 0
+                                // Model column stretches up to ~half the card
+                                // so the discount column lands at a consistent
+                                // mid-card offset (clear value column, no
+                                // full-width gulf) — but never below its own
+                                // text width, so long names are never elided.
+                                // Capped against rowDelegate (the card), NOT
+                                // the GridLayout: a maximumWidth fed by the
+                                // grid's own width is a layout binding loop.
                                 Layout.fillWidth: true
+                                Layout.maximumWidth: Math.max(
+                                    Math.round(rowDelegate.width * 0.5), implicitWidth)
                                 text: modelData.model ?? ""
                                 elide: Text.ElideRight
                                 // font.pointSize (not the smallFont group) so
