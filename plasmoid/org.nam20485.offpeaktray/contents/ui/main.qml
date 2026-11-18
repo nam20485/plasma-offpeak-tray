@@ -342,6 +342,32 @@ PlasmoidItem {
           }).join("\n")
 
     fullRepresentation: ColumnLayout {
+        id: fullRep
+
+        // Popup width is pinned to the widest subtext line (the long caption
+        // under each schedule) plus card padding, so the tables and badges
+        // wrap inside it instead of stretching the window wider.
+        readonly property string widthRef: {
+            let best = "";
+            for (const s of root.schedules)
+                if (s.subtext && s.subtext.length > best.length)
+                    best = s.subtext;
+            return best;
+        }
+
+        TextMetrics {
+            id: refMetrics
+
+            font: Kirigami.Theme.smallFont
+            text: fullRep.widthRef
+        }
+
+        readonly property real pinnedWidth: fullRep.widthRef
+            ? refMetrics.advanceWidth + Kirigami.Units.gridUnit * 2
+            : Kirigami.Units.gridUnit * 14
+
+        Layout.preferredWidth: fullRep.pinnedWidth
+        Layout.maximumWidth: fullRep.pinnedWidth
         spacing: Kirigami.Units.smallSpacing
 
         Repeater {
