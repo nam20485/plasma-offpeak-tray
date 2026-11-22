@@ -379,6 +379,11 @@ PlasmoidItem {
 
         Layout.preferredWidth: fullRep.pinnedWidth
         Layout.maximumWidth: fullRep.pinnedWidth
+        // Floor too: the systemtray StackView force-binds our width to the
+        // popup width, so preferred/maximum alone are ignored; the minimum
+        // keeps a fresh install (no stored popupWidth) from collapsing to the
+        // tray's gridUnit*24 default and wrapping the state badge.
+        Layout.minimumWidth: fullRep.pinnedWidth
         spacing: Kirigami.Units.smallSpacing
 
         Repeater {
