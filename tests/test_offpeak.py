@@ -130,6 +130,17 @@ class ValidateConfigTests(unittest.TestCase):
                      {"model": "m", "discount": "80% off"}]
         self.assertTrue(invalid_doc({"schedules": [schedule(discounts=discounts)]}))
 
+    def test_accepts_optional_offpeak_discount(self):
+        discounts = [{"model": "m", "discount": "80% off", "offPeakDiscount": "92% off"},
+                     {"model": "n", "discount": None, "offPeakDiscount": "60% off"}]
+        schedules = offpeak.validate_config({"schedules": [schedule(discounts=discounts)]})
+        self.assertEqual(schedules[0]["discounts"], discounts)
+
+    def test_rejects_bad_offpeak_discount(self):
+        for value in ("", "  ", 92):
+            self.assertTrue(invalid_doc({"schedules": [
+                schedule(discounts=[{"model": "m", "offPeakDiscount": value}])]}), value)
+
 
 class CalendarSpecTests(unittest.TestCase):
     def setUp(self):

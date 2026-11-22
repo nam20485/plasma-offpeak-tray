@@ -23,13 +23,13 @@
             "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
             "start": "22:00",
             "end": "08:00",
-            "docsUrl": "https://www.alibabacloud.com/blog/qwen3-7-off-peak-rates_603404",
-            "subtext": "Nightly 22:00-08:00 Beijing time is OFF-PEAK, weekends included.",
+            "docsUrl": "https://docs.qwencloud.com/token-plan/personal/token-plan-personal-overview",
+            "subtext": "Nightly 22:00-08:00 Beijing time is OFF-PEAK, every day.",
             "discounts": [
-                { "model": "auto", "discount": "40% off" },
-                { "model": "qwen3.8-max", "discount": "40% off" },
-                { "model": "qwen3.8-flash", "discount": "40% off" },
-                { "model": "qwen4-max-preview", "discount": "80% off", "note": "limited time" },
+                { "model": "auto", "discount": null },
+                { "model": "qwen3.8-max", "discount": null, "offPeakDiscount": "60% off" },
+                { "model": "qwen3.8-flash", "discount": null, "offPeakDiscount": "60% off" },
+                { "model": "qwen4-max-preview", "discount": "80% off", "offPeakDiscount": "92% off", "note": "preview ends 2026-11-25" },
                 { "model": "qwen4-max", "discount": null }
             ]
         }

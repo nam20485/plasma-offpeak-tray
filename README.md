@@ -20,7 +20,7 @@ off-peak is 7 AM–5 PM; on PST it shifts an hour earlier. All schedule math is
 therefore done in the provider's zone, never in local time.
 
 - GLM reference: <https://docs.z.ai/devpack/notice/usage-revision>
-- Qwen reference: <https://www.alibabacloud.com/blog/qwen3-7-off-peak-rates_603404>
+- Qwen reference: <https://docs.qwencloud.com/token-plan/personal/token-plan-personal-overview>
 
 ## Architecture
 
@@ -75,7 +75,7 @@ provider's discount documentation (`docsUrl`) in the default browser.
 | `start`, `end`  | `"HH:MM"`| window bounds; `end <= start` means the window crosses midnight and attaches to the **start** day |
 | `docsUrl`       | string?  | optional `http(s)://` link opened when the popup row is clicked |
 | `subtext`       | string?  | optional detail text shown under the schedule inside its popup row (discount details, etc.) |
-| `discounts`     | object[]? | optional per-model rows `{model, discount, note?}` shown as an aligned table in the popup; `discount: null` means the model has no discount (shown as "—"). Rows with a discount render **bold + green** while the schedule is in its discounted state |
+| `discounts`     | object[]? | optional per-model rows `{model, discount, offPeakDiscount?, note?}` shown as an aligned table in the popup. `discount` is the base/daytime rate (`null` = none, shown as "—"); `offPeakDiscount` overrides it while the schedule is in its discounted state (for models whose night rate beats their base, e.g. a preview promo). Rows with a discount render **bold + green** while the schedule is in its discounted state |
 
 Example (the shipped default):
 
@@ -104,12 +104,12 @@ Example (the shipped default):
       "days": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
       "start": "22:00",
       "end": "08:00",
-      "docsUrl": "https://www.alibabacloud.com/blog/qwen3-7-off-peak-rates_603404",
+      "docsUrl": "https://docs.qwencloud.com/token-plan/personal/token-plan-personal-overview",
       "discounts": [
-        { "model": "auto", "discount": "40% off" },
-        { "model": "qwen3.8-max", "discount": "40% off" },
-        { "model": "qwen3.8-flash", "discount": "40% off" },
-        { "model": "qwen4-max-preview", "discount": "80% off", "note": "limited time" },
+        { "model": "auto", "discount": null },
+        { "model": "qwen3.8-max", "discount": null, "offPeakDiscount": "60% off" },
+        { "model": "qwen3.8-flash", "discount": null, "offPeakDiscount": "60% off" },
+        { "model": "qwen4-max-preview", "discount": "80% off", "offPeakDiscount": "92% off", "note": "preview ends 2026-11-25" },
         { "model": "qwen4-max", "discount": null }
       ]
     }

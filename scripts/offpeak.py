@@ -116,6 +116,9 @@ def validate_config(doc: object) -> list[dict]:
                 amount = disc.get("discount")
                 if amount is not None and (not isinstance(amount, str) or not amount.strip()):
                     raise ValueError(f"{dlabel}.discount: non-empty string or null required")
+                off_amount = disc.get("offPeakDiscount")
+                if off_amount is not None and (not isinstance(off_amount, str) or not off_amount.strip()):
+                    raise ValueError(f"{dlabel}.offPeakDiscount: non-empty string or null required")
                 note = disc.get("note")
                 if note is not None and (not isinstance(note, str) or not note.strip()):
                     raise ValueError(f"{dlabel}.note: optional non-empty string required")

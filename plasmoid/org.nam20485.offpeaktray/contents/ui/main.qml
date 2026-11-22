@@ -486,6 +486,15 @@ PlasmoidItem {
 
                         readonly property var entry: modelData
                         readonly property bool lit: entry.st.state === "offPeak"
+                        // Day vs night rate: while off-peak, prefer the row's
+                        // offPeakDiscount (preview models whose night rate
+                        // beats their standing base discount); otherwise the
+                        // base discount. null → no discount in that state.
+                        function amount(d) {
+                            return discounts.lit
+                                ? (d.offPeakDiscount ?? d.discount ?? null)
+                                : (d.discount ?? null);
+                        }
                         // Duck-check, NOT Array.isArray(): an array that
                         // crossed the modelData/var-property boundary loses
                         // its Array internal type in QML (isArray → false).
@@ -520,8 +529,8 @@ PlasmoidItem {
                                 // font.pointSize (not the smallFont group) so
                                 // font.bold can be set on the same label.
                                 font.pointSize: Kirigami.Theme.smallFont.pointSize
-                                font.bold: discounts.lit && !!modelData.discount
-                                color: discounts.lit && !!modelData.discount
+                                font.bold: discounts.lit && !!discounts.amount(modelData)
+                                color: discounts.lit && !!discounts.amount(modelData)
                                        ? Kirigami.Theme.positiveTextColor
                                        : Kirigami.Theme.disabledTextColor
                             }
@@ -533,10 +542,10 @@ PlasmoidItem {
                             PC3.Label {
                                 Layout.row: index
                                 Layout.column: 1
-                                text: modelData.discount ?? qsTr("—")
+                                text: discounts.amount(modelData) ?? qsTr("—")
                                 font.pointSize: Kirigami.Theme.smallFont.pointSize
-                                font.bold: discounts.lit && !!modelData.discount
-                                color: discounts.lit && !!modelData.discount
+                                font.bold: discounts.lit && !!discounts.amount(modelData)
+                                color: discounts.lit && !!discounts.amount(modelData)
                                        ? Kirigami.Theme.positiveTextColor
                                        : Kirigami.Theme.disabledTextColor
                             }
