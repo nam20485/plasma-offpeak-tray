@@ -12,7 +12,7 @@
         "Id": "org.nam20485.offpeaktray",
         "License": "MIT",
         "Name": "Off-Peak Tray",
-        "Version": "1.0.0",
+        "Version": "1.1.0",
         "Website": "https://github.com/nam20485/plasma-offpeak-tray"
     },
     "X-Plasma-API-Minimum-Version": "6.0",
