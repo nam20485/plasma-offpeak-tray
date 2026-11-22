@@ -363,8 +363,8 @@ PlasmoidItem {
         }
 
         // The state badge ("Off-peak") rendered in the default header font;
-        // its width is added to the pin so the caption line plus badge both
-        // fit without the window feeling cramped.
+        // half its width is added to the pin — enough breathing room for the
+        // badge without making the window feel wide.
         TextMetrics {
             id: badgeMetrics
 
@@ -373,7 +373,7 @@ PlasmoidItem {
         }
 
         readonly property real pinnedWidth: fullRep.widthRef
-            ? refMetrics.advanceWidth + badgeMetrics.advanceWidth
+            ? refMetrics.advanceWidth + badgeMetrics.advanceWidth / 2
               + Kirigami.Units.gridUnit * 2 + Kirigami.Units.smallSpacing * 2
             : Kirigami.Units.gridUnit * 14
 
